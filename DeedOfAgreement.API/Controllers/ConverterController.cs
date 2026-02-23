@@ -49,22 +49,14 @@ namespace DeedOfAgreement.API.Controllers
             htmlDoc.Load(templatePath);
 
             string finalHtml = htmlDoc.DocumentNode.OuterHtml;
-            if(data != null)
+            var current = Helper.GetDateInFullWords(DateTime.Now);
+            if (data != null)
             {
-                finalHtml = finalHtml.Replace("_ProjectName_", data.ProjectName);
+                finalHtml = finalHtml.Replace("_ProjectName_", data.ProjectName.ToUpper());
+                finalHtml = finalHtml.Replace("_Current_", current);
                 string phaseSuffix = data.ProjectName == "Purbachal Probashi Palli" ? " phase-1" : "";
                 finalHtml = finalHtml.Replace("_ProjectNamePhase_", (data.ProjectName + phaseSuffix).ToUpper());
 
-                //finalHtml = SafeReplace(finalHtml, "_ClientDetails", data.ClientDetails);
-                //finalHtml = SafeReplace(finalHtml, "_NomineeList_", data.NomineeList);
-                //finalHtml = SafeReplace(finalHtml, "_OptionOne_", data.OptionOne);
-                //finalHtml = SafeReplace(finalHtml, "_OptionTwo_", data.OptionTwo);
-                //finalHtml = SafeReplace(finalHtml, "_OptionA_", data.A);
-                //finalHtml = SafeReplace(finalHtml, "_OptionB_", data.B);
-                //finalHtml = SafeReplace(finalHtml, "_OptionC_", data.C);
-                //finalHtml = SafeReplace(finalHtml, "_Extra_Four_Month_", (data.TotalInstallment + 4).ToString());
-                //finalHtml = SafeReplace(finalHtml, "_BText_", data.Btext);
-                //finalHtml = SafeReplace(finalHtml, "_ScheduleB_", data.ScheduleB);
                 finalHtml = finalHtml.Replace("_ClientDetails", data.ClientDetails);
                 finalHtml = finalHtml.Replace("_NomineeList_", data.NomineeList);
                 finalHtml = finalHtml.Replace("_OptionOne_", data.OptionOne);
@@ -73,7 +65,7 @@ namespace DeedOfAgreement.API.Controllers
                 finalHtml = finalHtml.Replace("_OptionB_", data.B);
                 finalHtml = finalHtml.Replace("_OptionC_", data.C);
                 finalHtml = finalHtml.Replace("_Extra_Four_Month_", (data.TotalInstallment + 4).ToString());
-                finalHtml = finalHtml.Replace("_OrganizationName_", data.OrganizationName);
+                finalHtml = finalHtml.Replace("_OrganizationName_", data.OrganizationName.ToUpper());
                 finalHtml = finalHtml.Replace("_BText_", data.Btext);
                 finalHtml = finalHtml.Replace("_ScheduleB_", data.ScheduleB);
                 finalHtml = finalHtml.Replace(" ,", ",");
