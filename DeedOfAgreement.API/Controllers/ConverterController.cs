@@ -97,8 +97,8 @@ namespace DeedOfAgreement.API.Controllers
                         },
                         new PageMargin
                         {
-                            Top = 8784,
-                            Bottom = 1440,
+                            Top = 8640,
+                            Bottom = 1584,
                             Left = 1440,
                             Right = 1440
                         }
