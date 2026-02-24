@@ -69,6 +69,8 @@ namespace DeedOfAgreement.API.Controllers
                 finalHtml = finalHtml.Replace("_BText_", data.Btext);
                 finalHtml = finalHtml.Replace("_ScheduleB_", data.ScheduleB);
                 finalHtml = finalHtml.Replace(" ,", ",");
+                finalHtml = finalHtml.Replace("_forcesmall_", "style='font-size:13.5px;'");
+                finalHtml = finalHtml.Replace("LTD.,", "LTD.");
             }
             // 🔁 Replace placeholders
             
@@ -100,19 +102,10 @@ namespace DeedOfAgreement.API.Controllers
                             Top = 8640,
                             Bottom = 1584,
                             Left = 1440,
-                            Right = 1440
+                            Right = 1440,
+                            Footer = 1152U
                         }
                     );
-
-
-                    //var sectionProps = new SectionProperties(
-                    //    new PageMargin
-                    //    {
-                    //        Top = 5760,
-                    //        Bottom = 1440,
-                    //        Left = 1440,
-                    //        Right = 1440
-                    //    });
 
                     var converter = new HtmlConverter(mainPart);
                     var elements = converter.Parse(finalHtml);
