@@ -84,6 +84,7 @@ namespace DeedOfAgreement.API.Controllers
                     true))
                 {
                     var mainPart = wordDoc.AddMainDocumentPart();
+
                     mainPart.Document = new Document(new DocumentFormat.OpenXml.Wordprocessing.Body());
 
                     AddDefaultStyle(mainPart);
@@ -97,22 +98,51 @@ namespace DeedOfAgreement.API.Controllers
                             Type = HeaderFooterValues.Default,
                             Id = footerPartId
                         },
+                        new PageSize()
+                        {
+                            Width = 12240U,   // 8.5 inch
+                            Height = 20160U   // 14 inch (LEGAL)
+                        },
                         new PageMargin
                         {
                             Top = 8640,
-                            Bottom = 1584,
-                            Left = 1440,
-                            Right = 1440,
+                            Bottom = 1440,
+                            Left = 1152,
+                            Right = 720,
                             Footer = 1152U
                         }
                     );
 
                     var converter = new HtmlConverter(mainPart);
-                    var elements = converter.Parse(finalHtml);
 
-                    mainPart.Document.Body.Append(elements);
+                    //1st to before last page
+                    var splittedText = finalHtml.Split(
+                        new string[] { "_page_break_" },
+                        StringSplitOptions.None
+                    );
+                    var firstPageHtml = splittedText[0];
+                    var lastPageHtml = splittedText[1];
+
+                    var element_1 = converter.Parse(firstPageHtml);
+                    mainPart.Document.Body.Append(element_1);
+                    mainPart.Document.Body.Append(
+                        new Paragraph(
+                            new Run(
+                                new Break() { Type = BreakValues.Page }
+                            )
+                        )
+                    );
+                    var element_2 = converter.Parse(lastPageHtml);
+                    mainPart.Document.Body.Append(element_2);
+
                     mainPart.Document.Body.Append(sectionProps);
                     mainPart.Document.Save();
+
+                    //var elements = converter.Parse(finalHtml);
+
+                    //mainPart.Document.Body.Append(elements);
+                    //mainPart.Document.Body.Append(sectionProps);
+                    //mainPart.Document.Save();
                 }
 
                 fileBytes = memStream.ToArray();
@@ -151,7 +181,7 @@ namespace DeedOfAgreement.API.Controllers
             // Run properties (Pure Black + Normal Size)
             RunProperties runProps = new RunProperties(
                 new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman" },
-                new DocumentFormat.OpenXml.Wordprocessing.FontSize() { Val = "22" }, // 11pt
+                new DocumentFormat.OpenXml.Wordprocessing.FontSize() { Val = "21" }, // 11pt
                 new DocumentFormat.OpenXml.Wordprocessing.Color() { Val = "000000" } // PURE BLACK
             );
 
@@ -201,7 +231,7 @@ namespace DeedOfAgreement.API.Controllers
                             HighAnsi = "Times New Roman",
                             ComplexScript = "SolaimanLipi"
                         },
-                        new DocumentFormat.OpenXml.Wordprocessing.FontSize { Val = "22" },
+                        new DocumentFormat.OpenXml.Wordprocessing.FontSize { Val = "21" },
                         new DocumentFormat.OpenXml.Wordprocessing.Color { Val = "000000" }
                     )
                 ),
