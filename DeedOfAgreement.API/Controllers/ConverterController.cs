@@ -73,7 +73,7 @@ namespace DeedOfAgreement.API.Controllers
                 finalHtml = finalHtml.Replace("LTD.,", "LTD.");
             }
             // 🔁 Replace placeholders
-            
+
             byte[] fileBytes;
 
             using (var memStream = new MemoryStream())
@@ -105,9 +105,9 @@ namespace DeedOfAgreement.API.Controllers
                         },
                         new PageMargin
                         {
-                            Top = 8640,
-                            Bottom = 1440,
-                            Left = 1152,
+                            Top = 7920,
+                            Bottom = 2016,
+                            Left = 1296,
                             Right = 720,
                             Footer = 1152U
                         }
