@@ -5,6 +5,7 @@
         public string FileNo { get; set; }
         public int OrganizationId { get; set; }
         public int ProjectId { get; set; }
+        public string PrintType { get; set; }
         public string FileName => $"{FileNo}.docx";
     }
 }

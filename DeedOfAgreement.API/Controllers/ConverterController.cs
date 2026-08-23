@@ -33,7 +33,7 @@ namespace DeedOfAgreement.API.Controllers
         [Route("html-to-word")]
         public HttpResponseMessage ConvertHtmlToWord([FromBody] HtmlRequest db)
         {
-            var sqlQuery = $"USP_GET_DEED_OF_AGREEMENT_NEW {db.OrganizationId},{db.ProjectId},'{db.FileNo}'";
+            var sqlQuery = $"USP_GET_DEED_OF_AGREEMENT_NEW {db.OrganizationId},{db.ProjectId},'{db.FileNo}','{db.PrintType}'";
             var data = Helper.GetDataFromBackDB(sqlQuery).Tables[0].ToList<HtmlResponse>().FirstOrDefault();
 
             if (data == null)
@@ -116,33 +116,33 @@ namespace DeedOfAgreement.API.Controllers
                     var converter = new HtmlConverter(mainPart);
 
                     //1st to before last page
-                    var splittedText = finalHtml.Split(
-                        new string[] { "_page_break_" },
-                        StringSplitOptions.None
-                    );
-                    var firstPageHtml = splittedText[0];
-                    var lastPageHtml = splittedText[1];
+                    //var splittedText = finalHtml.Split(
+                    //    new string[] { "_page_break_" },
+                    //    StringSplitOptions.None
+                    //);
+                    //var firstPageHtml = splittedText[0];
+                    //var lastPageHtml = splittedText[1];
 
-                    var element_1 = converter.Parse(firstPageHtml);
-                    mainPart.Document.Body.Append(element_1);
-                    mainPart.Document.Body.Append(
-                        new Paragraph(
-                            new Run(
-                                new Break() { Type = BreakValues.Page }
-                            )
-                        )
-                    );
-                    var element_2 = converter.Parse(lastPageHtml);
-                    mainPart.Document.Body.Append(element_2);
+                    //var element_1 = converter.Parse(firstPageHtml);
+                    //mainPart.Document.Body.Append(element_1);
+                    //mainPart.Document.Body.Append(
+                    //    new Paragraph(
+                    //        new Run(
+                    //            new Break() { Type = BreakValues.Page }
+                    //        )
+                    //    )
+                    //);
+                    //var element_2 = converter.Parse(lastPageHtml);
+                    //mainPart.Document.Body.Append(element_2);
 
-                    mainPart.Document.Body.Append(sectionProps);
-                    mainPart.Document.Save();
-
-                    //var elements = converter.Parse(finalHtml);
-
-                    //mainPart.Document.Body.Append(elements);
                     //mainPart.Document.Body.Append(sectionProps);
                     //mainPart.Document.Save();
+
+                    var elements = converter.Parse(finalHtml);
+
+                    mainPart.Document.Body.Append(elements);
+                    mainPart.Document.Body.Append(sectionProps);
+                    mainPart.Document.Save();
                 }
 
                 fileBytes = memStream.ToArray();
